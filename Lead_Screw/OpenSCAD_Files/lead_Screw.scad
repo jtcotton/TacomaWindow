@@ -1,8 +1,8 @@
 rod_length = 100; 	// the length of the threaded rod
 
-thread_count = 2;	// number of threads
+thread_count = 3;	// number of threads
 thread_width = 3;	// the width of each thread
-thread_depth = 6;	// the radius of each thread
+thread_depth = 5;	// the radius of each thread
 	// If width is set to exactly twice the depth,
 	// you'll end up with a triangular thread profile.
 	// However, the resulting radius of the threaded
@@ -11,7 +11,7 @@ thread_depth = 6;	// the radius of each thread
 thread_facet_factor = 1024;	// thread facets/slices/resolution. 256 or greater works well.
 thread_facets = (rod_length/100)*thread_facet_factor;	
 
-thread_pitch = 0.2;	// turns per mm; this sets twist_degrees.
+thread_pitch = 0.18;	// turns per mm; this sets twist_degrees.
 twist_degrees = (rod_length*thread_pitch)*360;
 
 base_radius = 4;	// outer radius of the central cylinder 

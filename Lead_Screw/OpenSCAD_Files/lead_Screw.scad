@@ -1,17 +1,17 @@
 rod_length = 100; 	// the length of the threaded rod
 
-thread_count = 5;	// number of threads
-thread_width = 2;	// the width of each thread
-thread_depth = 5;	// the radius of each thread
+thread_count = 2;	// number of threads
+thread_width = 3;	// the width of each thread
+thread_depth = 6;	// the radius of each thread
 	// If width is set to exactly twice the depth,
 	// you'll end up with a triangular thread profile.
 	// However, the resulting radius of the threaded
 	// rod will no longer conform to thread_depth.
 	
-thread_facet_factor = 384;	// thread facets/slices/resolution. 256 or greater works well.
+thread_facet_factor = 1024;	// thread facets/slices/resolution. 256 or greater works well.
 thread_facets = (rod_length/100)*thread_facet_factor;	
 
-thread_pitch = 0.05;	// turns per mm; this sets twist_degrees.
+thread_pitch = 0.2;	// turns per mm; this sets twist_degrees.
 twist_degrees = (rod_length*thread_pitch)*360;
 
 base_radius = 4;	// outer radius of the central cylinder 
@@ -23,15 +23,15 @@ inner_facets = 12;	// facets of the central hole; set this to 6 for a hexagonal 
 nut_height = 15;	// the height of the nut
 nut_radius = 8;	// the radius of the nut
 nut_facets = 6;		// number of nut facets; set this to 6 for a hexagonal nut, 4 for square, 30+ for round.	
-nut_scale = 1.1;	// scale the nut by this much in the X and Y axes, in order to fit on the thread cleanly. A value of 1.1 works well.
+nut_scale = 1.2;	// scale the nut by this much in the X and Y axes, in order to fit on the thread cleanly. A value of 1.1 works well.
 
 rotate_increment = 360 / thread_count;  // the angle by which to rotate each thread (don't change this unless you want an asymmetrical result)
 
 //// Generation options ////
-shownut = 0;		// generate a nut
-showthread = 1;		// generate a threaded rod
+shownut = 1;		// generate a nut
+showthread = 0;		// generate a threaded rod
 showthreadplate = 0;	// generate a plate of multiple threaded rods
-plate_number = 3;	// when showthreadplate is set to 1, the number of rods generated will equal this number squared.
+plate_number = 2;	// when showthreadplate is set to 1, the number of rods generated will equal this number squared.
 
 module thread()
 {

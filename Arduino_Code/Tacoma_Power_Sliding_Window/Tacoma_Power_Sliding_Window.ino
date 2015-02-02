@@ -46,7 +46,7 @@ int in2Pin = 8;
 int switchClosePin = 10;
 int switchOpenPin = 11;
 int limitClosePin = 12;
-int limitOpenPin = 13;
+int limitOpenPin = 9;
 dir state = OFF;
 
 
@@ -59,7 +59,10 @@ void setState(dir newState);
 
 
 /**********************************************************************************************
-Configure I/O Pins when powered on
+Configure I/O Pins when powered on.
+
+Note:	All Input Pins are pulled up to VCC, so we are using inverse logic by pulling all Inputs
+	to GND when the are activated.
 **********************************************************************************************/
 void setup()
 {
@@ -74,7 +77,14 @@ void setup()
 	7	In2			10	SwitchClose
 	8	Truck +12V		11	SwitchOpen
 	16	Truck +12V		12	LimitClose
-					13	LimitOpen
+					9	LimitOpen
+
+	Switch Connections:		Limit Open Connections:		Limit Close Connections:
+
+	Open	SwitchOpen(11)		NO	LimitOpen(9)		NO	LimitClose(12)
+	COM	GND			COM	GND			COM	GND
+	Close	SwitchClose(10)
+
   ********************************************************************************************/
 
   pinMode(enaPin, OUTPUT);
@@ -96,35 +106,39 @@ void loop()
 	State Change Scenarios:
 
 	LastState	LimitClose	LimitOpen	SwitchClose	SwitchOpen	NewState
-	OFF		X		0		X		1		OPEN		If Stopped & Open Button pressed & Not @ Open Limit, start opening
-	OFF		0		X		1		X		CLOSE		If Stopped & Close Button pressed & Not @ Close Limit, start Closing
-	OPEN		X		X		1		X		OFF		If Opening & Close Button pressed, stop
-	OPEN		X		1		X		X		OFF		If Opening & Opened limit reached, stop
-	CLOSE		X		X		X		1		OFF		If Closing & Open Button pressed, stop
-	CLOSE		1		X		X		X		OFF		If Closing & Closed limit reached, stop
+	OFF		X		HIGH		X		LOW		OPEN		If Stopped & Open Button pressed & Not @ Open Limit, start opening
+	OFF		HIGH		X		LOW		X		CLOSE		If Stopped & Close Button pressed & Not @ Close Limit, start Closing
+	OPEN		X		X		LOW		X		OFF		If Opening & Close Button pressed, stop
+	OPEN		X		LOW		X		X		OFF		If Opening & Opened limit reached, stop
+	CLOSE		X		X		X		LOW		OFF		If Closing & Open Button pressed, stop
+	CLOSE		LOW		X		X		X		OFF		If Closing & Closed limit reached, stop
+
+
+	Note:	All Input Pins are pulled up to VCC (normally HIGH), so we are using inverse logic by connecting the Input
+		to GND when activated so they show up as LOW.
   ********************************************************************************************/
 
-  if (state == OFF && digitalRead(limitOpenPin) == LOW && digitalRead(switchOpenPin) == HIGH )
+  if (state == OFF && digitalRead(limitOpenPin) == HIGH && digitalRead(switchOpenPin) == LOW )
   {
     setState(OPEN);
   }
-  else if (state == OFF && digitalRead(limitClosePin) == LOW && digitalRead(switchClosePin) == HIGH )
+  else if (state == OFF && digitalRead(limitClosePin) == HIGH && digitalRead(switchClosePin) == LOW )
   {
     setState(CLOSE);
   }
-  else if (state == OPEN && digitalRead(switchClosePin) == HIGH )
+  else if (state == OPEN && digitalRead(switchClosePin) == LOW )
   {
     setState(OFF);
   }
-  else if (state == OPEN && digitalRead(limitOpenPin) == HIGH )
+  else if (state == OPEN && digitalRead(limitOpenPin) == LOW )
   {
     setState(OFF);
   }
-  else if (state == CLOSE && digitalRead(switchOpenPin) == HIGH )
+  else if (state == CLOSE && digitalRead(switchOpenPin) == LOW )
   {
     setState(OFF);
   }
-  else if (state == CLOSE && digitalRead(limitClosePin) == HIGH )
+  else if (state == CLOSE && digitalRead(limitClosePin) == LOW )
   {
     setState(OFF);
   }
@@ -144,12 +158,13 @@ void setState(dir newState)
 	1	1	0	OPEN
 	1	0	1	CLOSE
   ********************************************************************************************/
-
+  state = newState;
   if (newState == OFF)
   {
     digitalWrite(enaPin, HIGH);
     digitalWrite(in1Pin, LOW);
     digitalWrite(in2Pin, LOW);
+    delay(500);
   }
   else if (newState == OPEN)
   {

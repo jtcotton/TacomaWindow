@@ -20,9 +20,9 @@ base_facets = 64;	// facets of the central cylinder. Recommended to set this 32 
 inner_radius = 2.5;	// radius of the central hole
 inner_facets = 12;	// facets of the central hole; set this to 6 for a hexagonal hole, set it to some high value like 20 for a circular hole.
 
-nut_height = 15;	// the height of the nut
-nut_radius = 8;	// the radius of the nut
-nut_facets = 6;		// number of nut facets; set this to 6 for a hexagonal nut, 4 for square, 30+ for round.	
+nut_height = 7;	// the height of the nut
+nut_radius = 6;	// the radius of the nut
+nut_facets = 30;		// number of nut facets; set this to 6 for a hexagonal nut, 4 for square, 30+ for round.	
 nut_scale = 1.2;	// scale the nut by this much in the X and Y axes, in order to fit on the thread cleanly. A value of 1.1 works well.
 
 rotate_increment = 360 / thread_count;  // the angle by which to rotate each thread (don't change this unless you want an asymmetrical result)
